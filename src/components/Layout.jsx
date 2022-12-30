@@ -8,9 +8,13 @@ import {
  Paper,
  Transition,
  Text,
+ ActionIcon,
+ Badge,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { ShoppingCart } from "tabler-icons-react";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 
 const HEADER_HEIGHT = 60;
 
@@ -97,12 +101,12 @@ const links = [
 
 export default function Layout() {
  const [opened, { toggle, close }] = useDisclosure(false);
-
  const { classes, cx } = useStyles();
  const navigate = useNavigate();
  const params = useLocation();
  let activeLinkIndex = links.findIndex((link) => link.link === params.pathname);
  const [active, setActive] = useState(links[activeLinkIndex].link);
+ const { cartQuantity } = useShoppingCart();
 
  const items = links.map((link) => (
   <a
@@ -116,7 +120,24 @@ export default function Layout() {
     navigate(link.link);
    }}
   >
-   {link.label}
+   {link.label === "Shopping Cart" ? (
+    <Badge
+     sx={{ paddingLeft: 0 }}
+     size="lg"
+     radius="lg"
+     color="teal"
+     variant="transparent"
+     leftSection={
+      <ActionIcon size="md" color="blue" radius="lg" variant="transparent">
+       <ShoppingCart size={40} />
+      </ActionIcon>
+     }
+    >
+     {cartQuantity}
+    </Badge>
+   ) : (
+    link.label
+   )}
   </a>
  ));
 
@@ -124,10 +145,23 @@ export default function Layout() {
   <>
    <Header height={HEADER_HEIGHT} className={classes.root}>
     <Container className={classes.header}>
-     <Text>RandoStore</Text>
+     <Text size={"xl"}>RandoStore</Text>
+     <Group></Group>
      <Group spacing={5} className={classes.links}>
       {items}
+      {/* <ActionIcon
+       className={classes.links}
+       onClick={(event) => {
+        event.preventDefault();
+        setActive("/shopping-cart");
+        close();
+        navigate("/shopping-cart");
+       }}
+      >
+       <ShoppingCart />
+      </ActionIcon> */}
      </Group>
+
      <Burger
       opened={opened}
       onClick={toggle}

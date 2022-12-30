@@ -1,7 +1,7 @@
 import React from "react";
 import useAxios from "../hooks/useAxios";
 import ProductCard from "../components/ProductCard";
-import { Container, SimpleGrid } from "@mantine/core";
+import { Container, SimpleGrid, Text } from "@mantine/core";
 
 const ProductsList = () => {
  const { response, error, loading } = useAxios({
@@ -19,7 +19,10 @@ const ProductsList = () => {
    ) : (
     <div>
      {/* {error && error.message} */}
-     <Container py="xl">
+     <Container my="xl">
+      <Text fw={500} fz="xl" my={10} color="#228be6">
+       All Products
+      </Text>
       <SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
        {response &&
         response.map((product) => {
