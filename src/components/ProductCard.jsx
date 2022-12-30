@@ -1,4 +1,5 @@
 import { Card, Image, Text, Group, createStyles, Button } from "@mantine/core";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 
 const useStyles = createStyles((theme) => ({
  card: {
@@ -44,6 +45,8 @@ export default function ProductCard({ product }) {
  let imageSrc = process.env.REACT_APP_APIS_BASE_URL + img?.slice(1);
  const { classes } = useStyles();
 
+ const { increaseCartQuantity } = useShoppingCart();
+
  return (
   <Card withBorder radius="md" className={classes.card}>
    <Card.Section className={classes.imageSection}>
@@ -67,7 +70,7 @@ export default function ProductCard({ product }) {
       radius="xl"
       style={{ flex: 1 }}
       size="xs"
-      onClick={() => console.log(product)}
+      onClick={() => increaseCartQuantity(product)}
      >
       Add To Cart
      </Button>
