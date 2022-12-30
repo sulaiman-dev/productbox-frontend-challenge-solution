@@ -10,7 +10,7 @@ import {
  Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
 const HEADER_HEIGHT = 60;
 
@@ -97,9 +97,12 @@ const links = [
 
 export default function Layout() {
  const [opened, { toggle, close }] = useDisclosure(false);
- const [active, setActive] = useState(links[0].link);
+
  const { classes, cx } = useStyles();
  const navigate = useNavigate();
+ const params = useLocation();
+ let activeLinkIndex = links.findIndex((link) => link.link === params.pathname);
+ const [active, setActive] = useState(links[activeLinkIndex].link);
 
  const items = links.map((link) => (
   <a
