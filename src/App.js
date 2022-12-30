@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
+import CreateItem from "./pages/CreateItem";
+import NoMatch from "./pages/NoMatch";
+import ProductsList from "./pages/ProductsList";
+import ShoppingCart from "./pages/ShoppingCart";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+ return (
+  <Routes>
+   <Route path="/" element={<Layout />}>
+    <Route index element={<ProductsList />} />
+    <Route path="shopping-cart" element={<ShoppingCart />} />
+    <Route path="create-item" element={<CreateItem />} />
+    <Route path="*" element={<NoMatch />} />
+   </Route>
+  </Routes>
+ );
 }
 
 export default App;
