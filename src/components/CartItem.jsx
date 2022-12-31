@@ -1,9 +1,11 @@
 import React from "react";
-import { Text, Group, ActionIcon } from "@mantine/core";
+import { Text, Group, ActionIcon, Avatar } from "@mantine/core";
 import { Minus, Plus, Trash } from "tabler-icons-react";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 
 const CartItem = ({ item }) => {
+ const { name, img, price, subTotal } = item;
+ let imageSrc = process.env.REACT_APP_APIS_BASE_URL + img?.slice(1);
  const {
   increaseCartQuantity,
   decreaseCartQuantity,
@@ -12,8 +14,15 @@ const CartItem = ({ item }) => {
  } = useShoppingCart();
  return (
   <tr>
-   <td>{item?.name || "item name"}</td>
-   <td>{item?.price || 0}</td>
+   <td>
+    <Group spacing="sm">
+     <Avatar size={46} src={imageSrc} radius={5} />
+     <Text size="sm" weight={500}>
+      {name || "item Name"}
+     </Text>
+    </Group>
+   </td>
+   <td>{price || 0}</td>
 
    <td>
     <Group spacing={10}>
@@ -36,7 +45,7 @@ const CartItem = ({ item }) => {
      </ActionIcon>
     </Group>
    </td>
-   <td>{item.subtotal || 0}</td>
+   <td>{subTotal || 0}</td>
    <td>
     <Group spacing={10}>
      <ActionIcon

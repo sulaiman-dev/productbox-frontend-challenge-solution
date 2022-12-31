@@ -96,7 +96,7 @@ const useStyles = createStyles((theme) => ({
 const links = [
  { link: "/", label: "Products" },
  { link: "/create-item", label: "Create Item" },
- { link: "/shopping-cart", label: "Shopping Cart" },
+ //  { link: "/shopping-cart", label: "Shopping Cart" },
 ];
 
 export default function Layout() {
@@ -105,8 +105,15 @@ export default function Layout() {
  const navigate = useNavigate();
  const params = useLocation();
  let activeLinkIndex = links.findIndex((link) => link.link === params.pathname);
- const [active, setActive] = useState(links[activeLinkIndex].link);
+ const [active, setActive] = useState(links[activeLinkIndex]?.link);
  const { cartQuantity } = useShoppingCart();
+
+ const navigateHandler = (event, link) => {
+  event.preventDefault();
+  setActive(link);
+  close();
+  navigate(link);
+ };
 
  const items = links.map((link) => (
   <a
@@ -114,30 +121,10 @@ export default function Layout() {
    href={link.link}
    className={cx(classes.link, { [classes.linkActive]: active === link.link })}
    onClick={(event) => {
-    event.preventDefault();
-    setActive(link.link);
-    close();
-    navigate(link.link);
+    navigateHandler(event, link.link);
    }}
   >
-   {link.label === "Shopping Cart" ? (
-    <Badge
-     sx={{ paddingLeft: 0 }}
-     size="lg"
-     radius="lg"
-     color="teal"
-     variant="transparent"
-     leftSection={
-      <ActionIcon size="md" color="blue" radius="lg" variant="transparent">
-       <ShoppingCart size={40} />
-      </ActionIcon>
-     }
-    >
-     {cartQuantity}
-    </Badge>
-   ) : (
-    link.label
-   )}
+   {link.label}
   </a>
  ));
 
@@ -145,23 +132,41 @@ export default function Layout() {
   <>
    <Header height={HEADER_HEIGHT} className={classes.root}>
     <Container className={classes.header}>
-     <Text size={"xl"}>RandoStore</Text>
-     <Group></Group>
+     <Text
+      size={"xl"}
+      onClick={(event) => {
+       navigateHandler(event, "/");
+      }}
+     >
+      RandoStore
+     </Text>
      <Group spacing={5} className={classes.links}>
       {items}
-      {/* <ActionIcon
-       className={classes.links}
-       onClick={(event) => {
-        event.preventDefault();
-        setActive("/shopping-cart");
-        close();
-        navigate("/shopping-cart");
-       }}
-      >
-       <ShoppingCart />
-      </ActionIcon> */}
      </Group>
-
+     <Group>
+      <Badge
+       sx={{ paddingLeft: 0 }}
+       size="lg"
+       radius="lg"
+       color="teal"
+       variant="transparent"
+       leftSection={
+        <ActionIcon
+         size="md"
+         color="blue"
+         radius="lg"
+         variant="transparent"
+         onClick={(event) => {
+          navigateHandler(event, "/shopping-cart");
+         }}
+        >
+         <ShoppingCart size={40} />
+        </ActionIcon>
+       }
+      >
+       {cartQuantity}
+      </Badge>
+     </Group>
      <Burger
       opened={opened}
       onClick={toggle}
